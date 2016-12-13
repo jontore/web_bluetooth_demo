@@ -11,7 +11,8 @@ BLEUnsignedCharCharacteristic tempCharacteristic("72664d13-e5bd-4dfd-b184-6fa5b5
 float oldTemperature = 0;
 long previousMillis = 0;
 
-const int B = 3975;
+const int B=4275;                 // B value of the thermistor
+const int R0 = 100000;            // R0 = 100k
 
 
 void setup() {
@@ -23,7 +24,7 @@ void setup() {
   blePeripheral.setAdvertisedServiceUuid(tempService.uuid());
   blePeripheral.addAttribute(tempService);
   blePeripheral.addAttribute(tempCharacteristic);
-  tempCharacteristic.setValue(oldTemperature); 
+  tempCharacteristic.setValue(oldTemperature);
 
   /* Now activate the BLE device.  It will start continuously transmitting BLE
      advertising packets and will be visible to remote BLE central devices
@@ -65,11 +66,11 @@ void loop() {
 void updateTempLevel() {
   int val = analogRead(A0);
 
-  // Determine the current resistance of the thermistor based on the sensor value.
-  float resistance = (float)(1023-val)*10000/val;
+  float R = 1023.0/((float)val)-1.0;
+  R = 100000.0*R;
 
-  // Calculate the temperature based on the resistance value.
-  float temperature = 1/(log(resistance/10000)/B+1/298.15)-273.15;
+  float temperature = 1.0/(log(R/100000.0)/B+1/298.15)-273.15;//convert to temperature via datasheet ;
+
 
   if (temperature != oldTemperature) {
     Serial.print("Temp is % is now: ");

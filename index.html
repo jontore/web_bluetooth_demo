@@ -3,9 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/temp.css" media="screen" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <script src="./js/register-sw.js" charset="utf-8"></script>
   </head>
-  <body>
-    <button id="find-devices">Find devices</button>
-    <script src="js/bluethooth.js" charset="utf-8"></script>
+  <body class="main-secton">
+    <section class="js-connect-section">
+      <h1 class="page-section page-instruction">T</h1>
+      <button class="page-section page-bottom connect-button" id="find-devices">Click to connect your device</button>
+    </section>
+
+    <section class="page-section temperature-section hidden js-temperature-section">
+        <h1 class="page-section page-instruction">T:</h1>
+        <div class="page-section page-bottom temperature-container"><span id="temp-container">-</span> C</div>
+    </section>
+
+    <section class="page-section error-section hidden js-error-section">
+        <h1 class="page-section page-instruction">No bluetooth :(</h1>
+    </section>
+    <script src="./js/bluetooth.js" charset="utf-8"></script>
   </body>
 </html>

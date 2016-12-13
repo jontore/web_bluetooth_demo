@@ -1,0 +1,49 @@
+.main-secton {
+  background-color: #EAE8D2;
+  height: 100vh;
+  font-family: 'Helvetica Neue';
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.page-instruction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  font-size: 170px;
+
+  margin: 0;
+  padding: 20px;
+}
+
+.page-bottom {
+  background-color: #DE6E5F;
+  color: #FFF;
+  text-transform: uppercase;
+  font-size: 24px;
+}
+
+.page-section {
+  text-align: center;
+  width: 100vw;
+  height: 50vh;
+
+  box-sizing: border-box;
+}
+
+.connect-button {
+  cursor: pointer;
+  border-radius: 0;
+  border: 1px solid #CCC;
+  padding: 20px;
+}
+
+.temperature-container {
+  font-size: 40px;
+}
+
+.hidden {
+  display: none;
+}
