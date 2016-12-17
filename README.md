@@ -6,7 +6,7 @@ It is also works offline using sw.
 
 ## Web app
 
-[Application available here](https://github.com/jontore/web_bluetooth_demo)
+[Application available here](https://jontore.github.io/web_bluetooth_demo/)
 
 The web-bluetooth is currently supported in chrome under experimental flags
 Check here if your browser is supported. http://caniuse.com/#search=bluetooth
@@ -26,4 +26,4 @@ Check here if your browser is supported. http://caniuse.com/#search=bluetooth
 ## Arduino app resources
 * [Grove temperature sensor 1.2](http://wiki.seeed.cc/Grove-Temperature_Sensor/)
 * [Curie BLE lib for arduino 101](https://www.arduino.cc/en/Reference/CurieBLE)
-* [Grove starter kit from seeedstudio][https://www.seeedstudio.com/Grove-Starter-Kit-for-Arduino-p-1855.html]
+* [Grove starter kit from seeedstudio](https://www.seeedstudio.com/Grove-Starter-Kit-for-Arduino-p-1855.html)
