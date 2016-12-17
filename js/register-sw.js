@@ -1,4 +1,4 @@
-navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+navigator.serviceWorker.register('./service-worker.js', { scope: './' }).then(function(reg) {
   if (reg.waiting) {
     promptForUpdate(reg.waiting);
     return;
