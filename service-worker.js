@@ -1,4 +1,4 @@
-var CACHE_NAME = 'bluetooth-pw-cache-v1';
+var CACHE_NAME = 'bluetooth-pw-cache-v5';
 var urlsToCache = [
   './index.html',
   './css/temp.css',
@@ -17,10 +17,30 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-    console.log(event.request.url);
     event.respondWith(
         caches.match(event.request).then(function(response) {
             return response || fetch(event.request);
         })
     );
+});
+
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          return cacheName.startsWith('bluetooth-pw-');
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
+
+self.addEventListener('message', function(event) {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
 });
