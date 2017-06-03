@@ -7,7 +7,7 @@ BLEPeripheral blePeripheral;       // BLE Peripheral Device (the board you're pr
 BLEService tempService("72664d13-e5bd-4dfd-b184-6fa5b5f9c2e6");
 
 // BLE Battery Level Characteristic"
-BLEUnsignedCharCharacteristic tempCharacteristic("72664d13-e5bd-4dfd-b184-6fa5b5f9c2e6",  // standard 16-bit characteristic UUID
+BLEFloatCharacteristic tempCharacteristic("72664d13-e5bd-4dfd-b184-6fa5b5f9c2e6",  // standard 16-bit characteristic UUID
     BLERead | BLENotify);
 
 float oldTemperature = 0;

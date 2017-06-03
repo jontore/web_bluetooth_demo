@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 import { BleManager } from 'react-native-ble-plx';
-
-import base64 from 'base-64';
+import { Buffer } from 'buffer';
 
 import {
   Button,
@@ -87,11 +86,14 @@ class PairButton extends Component {
   pollForData() {
     const device = this.state.connected;
     device.monitorCharacteristicForService(TEMP_SERVICE_CHARACTERISTIC_UUID, TEMP_SERVICE_CHARACTERISTIC_UUID, (error, characteristic) => {
-        console.log('@@@', base64.decode(characteristic.value), characteristic)
         this.setState({
-          temperature: characteristic.value
+          temperature: PairButton.readFloat(characteristic.value)
         });
     });
+  }
+
+  static readFloat(b64EncodedValue) {
+    return new Buffer(b64EncodedValue, "base64").readFloatLE(0);
   }
 
   _keyExtractor = (item, index) => item.id;
