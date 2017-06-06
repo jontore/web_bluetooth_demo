@@ -1,4 +1,4 @@
-var CACHE_NAME = 'bluetooth-pw-cache-v5';
+var CACHE_NAME = 'bluetooth-pw-cache-v7';
 var urlsToCache = [
   './index.html',
   './css/temp.css',
