@@ -16,6 +16,20 @@ Check here if your browser is supported. http://caniuse.com/#search=bluetooth
 > In Chrome 56 or later, go to chrome://flags/#enable-experimental-web-platform-features otherwise go to > chrome://flags/#enable-web-bluetooth, enable the highlighted flag, restart Chrome and you should be able to scan for and connect to nearby > Bluetooth devices, read/write Bluetooth characteristics, receive GATT Notifications and know when a Bluetooth device gets disconnected.
 
 
+## React native app
+Setup your environment [Here](https://facebook.github.io/react-native/docs/getting-started.html)
+then run
+
+```
+  npm install
+```
+
+Open android studio, run virtual phone or connect your phone
+
+```
+react-native run-android
+```
+
 ## Web app resources
 
 * [ServiceWorker moz](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
