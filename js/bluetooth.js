@@ -44,7 +44,7 @@ function showTempSection() {
 }
 
 function updateTemp(temp) {
-  document.querySelector('#temp-container').innerText = temp.getUint8(0);
+  document.querySelector('#temp-container').innerText = temp.getFloat32(0, true).toFixed(2);
 }
 
 function showErrorMessage() {
