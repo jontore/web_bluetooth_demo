@@ -30,6 +30,13 @@ Open android studio, run virtual phone or connect your phone
 react-native run-android
 ```
 
+Build a relase version, follow this [guide](http://facebook.github.io/react-native/docs/signed-apk-android.html)
+and run
+
+```
+react-native run-android --variant=release
+``` 
+
 ## Web app resources
 
 * [ServiceWorker moz](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
