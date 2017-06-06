@@ -4,7 +4,6 @@ import { BleManager } from 'react-native-ble-plx';
 import { Buffer } from 'buffer';
 
 import {
-  Button,
   Text,
   View,
   StyleSheet,
@@ -12,52 +11,51 @@ import {
   Vibration
 } from 'react-native';
 
-const TEMP_SERVICE_CHARACTERISTIC_UUID = "72664d13-e5bd-4dfd-b184-6fa5b5f9c2e6";
+import Button from './button';
+
 const vibrationPattern = [0, 500, 200, 500];
 class PairButton extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      pairing: false,
       connecting: false,
-      connected: {},
+      connected: null,
       devices: []
     }
 
     this.manager = new BleManager();
 
-    this.pair = this.pair.bind(this);
     this._renderItem = this._renderItem.bind(this);
-    this.pollForData = this.pollForData.bind(this);
+    this.getMessage = this.getMessage.bind(this);
     this.scanAndConnect = this.scanAndConnect.bind(this);
     this.connectToDevice = this.connectToDevice.bind(this);
   }
 
+  componentWillMount() {
+    const subscription = this.manager.onStateChange((state) => {
+        if (state === 'PoweredOn') {
+            this.scanAndConnect();
+            subscription.remove();
+        }
+    }, true);
+  }
+
   scanAndConnect() {
-    this.setState({
-      pairing: true
-    });
     this.manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
             // Handle error (scanning will be stopped automatically)
             return
         }
-
-        if (device.serviceUUIDs && device.serviceUUIDs.length > 0 && device.serviceUUIDs[0] === TEMP_SERVICE_CHARACTERISTIC_UUID) {
+        if (device.serviceUUIDs && device.serviceUUIDs.length > 0 && device.serviceUUIDs[0] === this.props.serviceId) {
           const isInList = this.state.devices.find(({ id }) => id === device.id);
           if (!isInList) {
             this.setState({
-              devices: [...this.state.devices, device],
-              pairing: false
+              devices: [...this.state.devices, device]
             });
           }
         }
     });
-  }
-
-  pair() {
-    this.scanAndConnect();
   }
 
   connectToDevice(device) {
@@ -77,23 +75,16 @@ class PairButton extends Component {
         this.setState({
           connecting: false,
           connected: device
-        }, this.pollForData);
+        }, () => this.props.onConnection(device));
       })
-      .catch(console.errror);
-    });
-  }
-
-  pollForData() {
-    const device = this.state.connected;
-    device.monitorCharacteristicForService(TEMP_SERVICE_CHARACTERISTIC_UUID, TEMP_SERVICE_CHARACTERISTIC_UUID, (error, characteristic) => {
+      .catch((error) => {
         this.setState({
-          temperature: PairButton.readFloat(characteristic.value)
+          connecting: true,
+          error: 'Could not connect'
         });
+        console.error(error);
+      });
     });
-  }
-
-  static readFloat(b64EncodedValue) {
-    return new Buffer(b64EncodedValue, "base64").readFloatLE(0);
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -102,44 +93,68 @@ class PairButton extends Component {
     return (
       <Button
         title={device.name}
-        disabled={this.state.connecting || this.state.connected.id === device.id}
+        disabled={this.state.connecting}
         onPress={() => this.connectToDevice(device)}
       />
     );
   }
 
+  getMessage() {
+    if (this.state.error) {
+      return this.state.error;
+    }
+
+    if (this.state.devices.length === 0 ) {
+      return 'No Temperature device found';
+    }
+
+    if (this.state.connecting) {
+      return 'Connecting';
+    }
+
+    if (this.state.connected) {
+      return 'Connected'
+    }
+
+    return 'Not connected';
+  }
+
   render() {
+    function listHeader() {
+      return (<Text>Devices:</Text>);
+    };
     return (
       <View style={styles.container}>
-        { this.state.devices.length === 0 ?
-          <Button
-            title="pair"
-            onPress={this.pair}
-            style={styles.button}
-            disabled={this.state.pairing}
+        <Text style={styles.instruction}>{this.getMessage()}</Text>
+        {this.state.devices.length > 0 ?
+          <FlatList
+            style={styles.list}
+            ListHeaderComponent={listHeader}
+            data={this.state.devices}
+            keyExtractor={(item) => item.id}
+            renderItem={this._renderItem}
           />
-          : null
+          : <Button title="Refresh" onPress={this.scanAndConnect}/>
         }
-        <Text>TEMP</Text>
-        <Text>{this.state.temperature}</Text>
-        <Text>{this.state.connecting ? 'Connecting' : (this.state.connected ? 'Connected' : 'Not connected')}</Text>
-        <FlatList
-          data={this.state.devices}
-          keyExtractor={(item) => item.id}
-          renderItem={this._renderItem}
-        />
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  fullWidth: {
-    width: 250,
-    flexGrow: 2
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#6E6E6E'
   },
-  button: {
-    padding: 20
+  list: {
+    backgroundColor: '#6E6E6E'
+  },
+  instruction: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   }
 });
 
