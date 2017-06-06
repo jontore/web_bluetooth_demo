@@ -13,15 +13,35 @@ import {
 } from 'react-native';
 
 import PairButton from './src/containers/pairButton';
+import TemperatureDisplay from './src/containers/temperatureDisplay';
 
+const TEMP_SERVICE_CHARACTERISTIC_UUID = "72664d13-e5bd-4dfd-b184-6fa5b5f9c2e6";
 export default class reactNativeThermo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      device: null
+    };
+
+    this.onDeviceConnected = this.onDeviceConnected.bind(this);
+  }
+
+  onDeviceConnected(device) {
+    console.log('---- devic', device);
+    this.setState({
+      device
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Temperature!
+        <Text style={styles.title}>
+          TEMPERATURE!
         </Text>
-        <PairButton/>
+        {!this.state.device ?
+            <PairButton serviceId={TEMP_SERVICE_CHARACTERISTIC_UUID} onConnection={this.onDeviceConnected}/>
+          :<TemperatureDisplay serviceId={TEMP_SERVICE_CHARACTERISTIC_UUID} device={this.state.device}/> }
       </View>
     );
   }
@@ -32,18 +52,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#6E6E6E'
   },
-  welcome: {
-    fontSize: 20,
+  title: {
+    fontSize: 31,
     textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    color: "#6576BF",
+    margin: 10
+  }
 });
 
 AppRegistry.registerComponent('reactNativeThermo', () => reactNativeThermo);
